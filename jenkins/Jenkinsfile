@@ -11,12 +11,16 @@ node {
             junit 'target/surefire-reports/*.xml'
         }
 
+        stage('Deliver') {
+            sh './jenkins/scripts/deliver.sh'
+        }
+
         stage('Manual Approval') {
             input 'Lanjutkan ke tahap Deploy?'
         }
 
-        stage('Deliver') {
-            sh './jenkins/scripts/deliver.sh'
+        stage('Deploy') {
+            sh 'vercel --scope ridho --cwd /jenkins/scripts/deliver.sh --no-color --token Y0mYUhieDTMI1dxhAWTDrRAQ deploy --prebuilt --prod'
 
             sleep 60
         }
