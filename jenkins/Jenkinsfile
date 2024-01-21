@@ -20,7 +20,7 @@ node {
         }
 
         stage('Deploy') {
-            sh 'vercel --scope ridho --cwd target/my-app-1.0-SNAPSHOT.jar --no-color --token Y0mYUhieDTMI1dxhAWTDrRAQ deploy --prebuilt --prod'
+            sh 'echo helloworld!'
 
             sleep 60
         }
