@@ -21,6 +21,7 @@ node {
 
         stage('Deploy') {
             sh 'pwd'
+            sh 'touch test.txt'
             sh '/usr/bin/scp -r /var/jenkins_home/workspace/submission-cicd-pipeline-M_ridho_hidayat/target/my-app-1.0-SNAPSHOT.jar root@8.219.41.186:/root'
             sh 'ssh root@8.219.41.186 apt install -y openjdk-19-jre-headless'
             sh 'ssh root@8.219.41.186 java -jar my-app-1.0-SNAPSHOT.jar'
