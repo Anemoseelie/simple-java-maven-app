@@ -20,7 +20,10 @@ node {
         }
 
         stage('Deploy') {
-            sshPublisher(publishers: [sshPublisherDesc(configName: 'ssh server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'java -jar my-app-1.0-SNAPSHOT.jar', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/root', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '/var/jenkins_home/workspace/submission-cicd-pipeline-M_ridho_hidayat/target/my-app-1.0-SNAPSHOT.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            sshagent(credentials: ['ssh-key']) {
+                sh 'ssh -o StrictHostKeyChecking=no root@8.219.41.186 uptime'
+                sh 'ssh -v root@8.219.41.186' 
+                sh 'scp /var/jenkins_home/workspace/submission-cicd-pipeline-M_ridho_hidayat/target/my-app-1.0-SNAPSHOT.jar root@8.219.41.18:/root'
 
             sleep 60
         }
