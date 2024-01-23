@@ -26,6 +26,7 @@ node {
                 sh 'scp /var/jenkins_home/workspace/submission-cicd-pipeline-M_ridho_hidayat/target/my-app-1.0-SNAPSHOT.jar root@8.219.41.18:/root'
 
             sleep 60
+            }
         }
     }
-}
+}    
