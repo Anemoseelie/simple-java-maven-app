@@ -6,37 +6,10 @@ pipeline {
         }
     }
     stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-            }
-        }
-        stage('Manual Approval') {
-            steps {
-                input 'Lanjutkan ke tahap Deploy?'
-            }    
-        }
         stage('Deploy') {
             steps {
-                sshagent(credentials: ['ssh-key']) {
-                    sh 'ssh -o StrictHostKeyChecking=no root@8.219.41.186 uptime'
-                    sh 'ssh -v root@8.219.41.186' 
-                    sh 'scp /var/jenkins_home/workspace/submission-cicd-pipeline-M_ridho_hidayat/target/my-app-1.0-SNAPSHOT.jar root@8.219.41.18:/root'
+                sshagent(['ssh-key']) {
+                    sh 'ssh -tt StrictHostKeyChecking=no root@8.219.41.186 ls'
                 }
             }
         }
