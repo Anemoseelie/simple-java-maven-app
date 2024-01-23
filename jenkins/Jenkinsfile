@@ -8,9 +8,8 @@ pipeline {
     stages {
         stage('Deploy') {
             steps {
-                sh 'sudo apt-get install -y openssh-client'
-                sshagent(['ssh-key']) {
-                    sh 'ssh -tt StrictHostKeyChecking=no root@8.219.41.186 ls'
+                script {
+                    sh 'sshpass -p "Es=NDW3yXLjzT(H" ssh -o StrictHostKeyChecking=no root@8.219.41.186 ls'
                 }
             }
         }
