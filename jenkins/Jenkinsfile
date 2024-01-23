@@ -31,7 +31,7 @@ pipeline {
                 input 'Lanjutkan ke tahap Deploy?'
             }    
         }
-        stage('Deliver') {
+        stage('Deploy') {
             steps {
                 sshagent(['ssh-key']) {
                     sh 'ssh -o StrictHostKeyChecking=no root@8.219.41.186 uptime'
