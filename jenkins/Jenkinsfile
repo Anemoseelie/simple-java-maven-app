@@ -11,6 +11,7 @@ pipeline {
                 script {
                     sshagent(['ssh-key']) {
                     sh 'ssh -o StrictHostKeyChecking=no root@8.219.41.186 ls'
+                    }
                 }
             }
         }
