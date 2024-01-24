@@ -10,8 +10,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'echo "root:root" | chpasswd'
-                    sh 'su root'
                     sh 'sudo apt-get update && sudo apt-get install -y sshpass'
                     sh 'sshpass -p "Es=NDW3yXLjzT(H" ssh -o StrictHostKeyChecking=no root@8.219.41.186 ls'
                 }
