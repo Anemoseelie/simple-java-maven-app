@@ -1,25 +1,20 @@
 node {
     stage('Build') {
         docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
-            sh 'mvn -B -X -DskipTests clean package'
-            sh 'ls -l target/'
+            sh 'mvn -version'
+            sh 'mvn -B -DskipTests clean package'
         }
     }
-
+    
     stage('Test') {
         docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
             sh 'mvn test'
-        }   
+        }
+        
         junit 'target/surefire-reports/*.xml'
     }
-
-    stage('Manual Approval') {
-        input message: 'Lanjutkan ke tahap Deploy?', ok: 'Lanjut'
-    }
-
-    stage('Deploy') {
-        sh 'chmod +x target/*.jar'
+    
+    stage('Deliver') {
         sh './jenkins/scripts/deliver.sh'
-        sleep 60
     }
 }
