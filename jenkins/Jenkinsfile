@@ -1,30 +1,21 @@
 node {
-    def mavenContainer
-
-    stage('Start Container') {
-        mavenContainer = docker.image('maven:3.9.0').run('-v /root/.m2:/root/.m2')
-    }
-
     stage('Build') {
-        mavenContainer.inside {
+        docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
             sh 'mvn -B -DskipTests clean package'
         }
     }
-
+    
     stage('Test') {
-        mavenContainer.inside {
+        docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
             sh 'mvn test'
         }
+        
         junit 'target/surefire-reports/*.xml'
     }
-
+    
     stage('Deliver') {
-        mavenContainer.inside {
-            sh './jenkins/scripts/deliver.sh'
+        docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
+             sh './jenkins/scripts/deliver.sh'
         }
-    }
-
-    stage('Cleanup') {
-        sh 'docker stop ${mavenContainer.id} && docker rm ${mavenContainer.id}'
     }
 }
