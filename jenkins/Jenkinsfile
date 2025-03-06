@@ -1,15 +1,14 @@
 node {
     stage('Build') {
         docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
-            sh 'mvn -B -DskipTests clean package'
+            sh 'mvn -e -B -DskipTests clean package'
         }
     }
 
     stage('Test') {
         docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
             sh 'mvn test'
-        }
-        // Post-action untuk selalu mengarsipkan laporan JUnit
+        }   
         junit 'target/surefire-reports/*.xml'
     }
 
