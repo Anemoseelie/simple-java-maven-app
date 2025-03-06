@@ -1,30 +1,30 @@
-pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.0'
-            args '-v /root/.m2:/root/.m2'
+node {
+    def mavenContainer
+
+    stage('Start Container') {
+        mavenContainer = docker.image('maven:3.9.0').run('-v /root/.m2:/root/.m2')
+    }
+
+    stage('Build') {
+        mavenContainer.inside {
+            sh 'mvn -B -DskipTests clean package'
         }
     }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
+
+    stage('Test') {
+        mavenContainer.inside {
+            sh 'mvn test'
         }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
+        junit 'target/surefire-reports/*.xml'
+    }
+
+    stage('Deliver') {
+        mavenContainer.inside {
+            sh './jenkins/scripts/deliver.sh'
         }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-            }
-        }
+    }
+
+    stage('Cleanup') {
+        sh 'docker stop ${mavenContainer.id} && docker rm ${mavenContainer.id}'
     }
 }
